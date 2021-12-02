@@ -34,6 +34,8 @@ function PhotoCard({ photo, handleOpen }) {
     }
   };
 
+  // const photoBufferOrUrl =
+
   return (
     <Grid
       item
@@ -47,13 +49,30 @@ function PhotoCard({ photo, handleOpen }) {
       onClick={handleOpen}
     >
       <Card sx={{ maxWidth: 350, height: 250 }}>
-        <CardMedia
+        {photo.image_url ? (
+          <CardMedia
+            component="img"
+            height="200"
+            width="180"
+            src={photo.image_url}
+            alt="green iguana"
+          />
+        ) : (
+          <CardMedia
+            component="img"
+            height="200"
+            width="180"
+            src={`data:image/jpeg;base64, ${bufferToImage(photo.image.data)}`}
+            alt="green iguana"
+          />
+        )}
+        {/* <CardMedia
           component="img"
           height="200"
           width="180"
           src={`data:image/jpeg;base64, ${bufferToImage(photo.image.data)}`}
           alt="green iguana"
-        />
+        /> */}
         {/* <CardContent></CardContent> */}
         <CardActions>
           <IconButton size="small" color="default">

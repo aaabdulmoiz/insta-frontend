@@ -71,12 +71,16 @@ function PhotoModal({
             <Grid container spacing={2} direction="row">
               <Grid container xs={12} md={8} lg={7}>
                 <Grid item>
-                  <CardMedia
-                    src={`data:image/jpeg;base64, ${bufferToImage(
-                      modalContent.image.data
-                    )}`}
-                    component="img"
-                  />
+                  {modalContent.image_url ? (
+                    <CardMedia src={modalContent.image_url} component="img" />
+                  ) : (
+                    <CardMedia
+                      src={`data:image/jpeg;base64, ${bufferToImage(
+                        modalContent.image.data
+                      )}`}
+                      component="img"
+                    />
+                  )}
                 </Grid>
               </Grid>
               <Grid

@@ -40,12 +40,12 @@ export default function CreatePostModal({
     data.append("content", caption);
     data.append("image", selectedImage);
     axios
-      .post("http://localhost:5000/api/upload", data)
+      .post("http://localhost:5000/api/posts/", data)
       .then((res) => {
         closeModal();
         handleSnackBarClick("success");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => handleSnackBarClick("error"));
   };
 
   return (
