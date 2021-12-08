@@ -65,7 +65,7 @@ function HomePage() {
         <div>
           <h2 style={{ color: Colors.text }}>HomePage</h2>
           {/* <p>The count is: {count}</p> */}
-          <p>the profile name is: {profile.name}</p>
+          <p>the profile sname is: {profile.name}</p>
           <p>The auth status is: {auth ? "true" : "false"}</p>
           <Fab
             color="secondary"

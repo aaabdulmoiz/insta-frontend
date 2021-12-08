@@ -66,14 +66,6 @@ function PhotoCard({ photo, handleOpen }) {
             alt="green iguana"
           />
         )}
-        {/* <CardMedia
-          component="img"
-          height="200"
-          width="180"
-          src={`data:image/jpeg;base64, ${bufferToImage(photo.image.data)}`}
-          alt="green iguana"
-        /> */}
-        {/* <CardContent></CardContent> */}
         <CardActions>
           <IconButton size="small" color="default">
             <Typography fontSize={12} padding={1}>

@@ -29,6 +29,7 @@ function PhotoModal({
   reactPost,
 }) {
   const [inputComment, setInputComment] = useState("");
+  const [modalHeight, setModalHeight] = useState("400px");
   const { profile } = useSelector((state) => state.profile);
 
   const bufferToImage = (image) => {
@@ -56,6 +57,18 @@ function PhotoModal({
     }
   };
 
+  const commentOnPost = () => {
+    if (!inputComment) {
+      return;
+    }
+    addComment(modalContent._id, inputComment);
+  };
+
+  const getModalHeight = (event) => {
+    console.log("heheh");
+    setModalHeight(event.target.naturalHeight);
+  };
+
   return (
     <div>
       <Modal
@@ -72,12 +85,17 @@ function PhotoModal({
               <Grid container xs={12} md={8} lg={7}>
                 <Grid item>
                   {modalContent.image_url ? (
-                    <CardMedia src={modalContent.image_url} component="img" />
+                    <CardMedia
+                      src={modalContent.image_url}
+                      component="img"
+                      onLoad={(event) => getModalHeight(event)}
+                    />
                   ) : (
                     <CardMedia
                       src={`data:image/jpeg;base64, ${bufferToImage(
                         modalContent.image.data
                       )}`}
+                      onLoad={(event) => getModalHeight(event)}
                       component="img"
                     />
                   )}
@@ -93,16 +111,18 @@ function PhotoModal({
                 // style={{ padding: "10px" }}
                 style={{
                   padding: "25px",
-                  maxHeight: "300px",
-                  minHeight: "210px",
+                  height: modalHeight,
+                  minHeight: "240px",
+                  maxHeight: "450px",
                   overflowY: "auto",
                 }}
               >
-                <Grid item>
+                {/* <Grid item>
                   <Avatar style={{ marginLeft: 10 }} />
-                </Grid>
+                </Grid> */}
 
                 <Grid item lg={12}>
+                  <Avatar style={{ marginLeft: 10 }} />
                   <CardContent
                     style={
                       {
@@ -141,14 +161,13 @@ function PhotoModal({
                         autoComplete: "off",
                         style: { fontSize: 13 },
                       }}
+                      error={inputComment === ""}
+                      helperText={inputComment === "" ? "Empty Field" : ""}
                       label="Comment"
                       variant="standard"
                       onChange={(event) => setInputComment(event.target.value)}
                     />
-                    <IconButton
-                      aria-label="send"
-                      onClick={() => addComment(modalContent._id, inputComment)}
-                    >
+                    <IconButton aria-label="send" onClick={commentOnPost}>
                       <SendIcon />
                     </IconButton>
                   </CardActions>

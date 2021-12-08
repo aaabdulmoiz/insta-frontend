@@ -2,8 +2,6 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import { pink } from "@mui/material/colors";
-import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -11,17 +9,13 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Colors from "../Constants/Colors";
 import CssBaseline from "@mui/material/CssBaseline";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import { Hidden } from "@mui/material";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import { login, logout, register } from "../redux/auth";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { auth as authenicate } from "../firebase";
 import { makeStyles } from "@mui/styles";
 
 export default function NavBar() {
@@ -31,7 +25,6 @@ export default function NavBar() {
 
   const logoutUser = async () => {
     try {
-      const logOut = await authenicate.signOut();
       dispatch(logout());
       history.push("/");
     } catch (error) {
@@ -54,8 +47,34 @@ export default function NavBar() {
         <CssBaseline />
         <AppBar position="static" style={{ backgroundColor: Colors.primary }}>
           <Toolbar>
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <React.Fragment>
+                  <IconButton
+                    variant="contained"
+                    disableElevation
+                    {...bindTrigger(popupState)}
+                    style={{ backgroundColor: Colors.primary }}
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    sx={{ mr: 2 }}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                    <MenuItem onClick={popupState.close}>Messages</MenuItem>
+                    <MenuItem onClick={popupState.close}>Friends</MenuItem>
+                    <MenuItem onClick={popupState.close}>Settings</MenuItem>
+                    <MenuItem onClick={popupState.close}>Privacy</MenuItem>
+                  </Menu>
+                </React.Fragment>
+              )}
+            </PopupState>
             <IconButton
-              size="large"
+              size="small"
               edge="start"
               color="inherit"
               aria-label="menu"
