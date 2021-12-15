@@ -24,14 +24,14 @@ function HomePage() {
 
   const handleClose = () => setModalOpen(false);
 
-  const handleSnackBarClick = (severity) => {
+  const handleSnackBarClick = (severity, message) => {
     if (severity === "success") {
       setOpenSnackMessage({
         severity: "success",
-        text: "Successfully uploaded.",
+        text: message,
       });
     } else {
-      setOpenSnackMessage({ severity: "error", text: "Please try again." });
+      setOpenSnackMessage({ severity: "error", text: message });
     }
     setOpenSnack(true);
   };

@@ -43,9 +43,9 @@ export default function CreatePostModal({
       .post("http://localhost:5000/api/posts/", data)
       .then((res) => {
         closeModal();
-        handleSnackBarClick("success");
+        handleSnackBarClick("success", "Post uploaded successfully!.");
       })
-      .catch((err) => handleSnackBarClick("error"));
+      .catch((err) => handleSnackBarClick("error", err.message));
   };
 
   return (

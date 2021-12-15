@@ -25,10 +25,16 @@ export default function NavBar() {
 
   const logoutUser = async () => {
     try {
+      console.log("in logout");
+      const url = "http://localhost:5000/api/user/logout";
+      const response = await fetch(url, {
+        method: "POST",
+      });
+      const res = await response.json();
       dispatch(logout());
       history.push("/");
     } catch (error) {
-      alert(error.message);
+      console.log(error.message);
     }
   };
 
