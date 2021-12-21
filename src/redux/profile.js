@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialProfile = { name: "", password: "", newUser: true, userId: "" };
+const initialProfile = { profile: { name: "", password: "", userId: "" } };
 
 export const counterSlice = createSlice({
   name: "profile",

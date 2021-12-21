@@ -7,6 +7,7 @@ export const counterSlice = createSlice({
   },
   reducers: {
     setPhotos: (state, action) => {
+      console.log(action.payload);
       state.photos = action.payload;
     },
     addPostComment: (state, action) => {

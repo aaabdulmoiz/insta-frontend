@@ -14,6 +14,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import { login, logout, register } from "../redux/auth";
+import { setPhotos } from "../redux/photos";
+import { profileClear } from "../redux/profile";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
@@ -31,6 +33,8 @@ export default function NavBar() {
         method: "POST",
       });
       const res = await response.json();
+      dispatch(setPhotos([]));
+      dispatch(profileClear());
       dispatch(logout());
       history.push("/");
     } catch (error) {

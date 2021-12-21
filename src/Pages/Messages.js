@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import io from "socket.io-client";
 import NavBar from "../Components/NavBar";
@@ -6,7 +6,7 @@ import Layout from "../Components/Layout";
 import { ChatFeed, Message } from "react-chat-ui";
 import { useSelector } from "react-redux";
 import Colors from "../Constants/Colors";
-import { TextField, Button, Grid } from "@mui/material";
+import { TextField, Button, Grid, responsiveFontSizes } from "@mui/material";
 import ChatBar from "../Components/ChatBar";
 
 export default function Messages() {
@@ -18,6 +18,7 @@ export default function Messages() {
   const [users, setUsers] = useState([]);
   const [recepient, setRecepient] = useState(null);
   const [messages, setMessages] = useState([]);
+  const recepientRef = useRef();
 
   useEffect(() => {
     getChatUsers();
@@ -26,10 +27,10 @@ export default function Messages() {
     });
     setSocket(newSocket);
     newSocket.on(profile.userId, (msg) => {
-      console.log("here listening");
-      console.log(recepient);
-      console.log(msg);
-      if (msg.recepient === profile.userId && msg.sender === recepient._id) {
+      if (
+        msg.recepient === profile.userId &&
+        msg.sender === recepientRef.current._id
+      ) {
         setMessages((messages) => [...messages, msg]);
       }
     });
@@ -61,17 +62,46 @@ export default function Messages() {
     setMessages((messages) => [...messages, { ...message, id: 0 }]);
     socket.emit("private message", {
       ...message,
-      id: uuidv4(),
       sender: profile.userId,
       recepient: recepient._id,
     });
     setMessage({ message: "" });
   };
 
-  const setRecepientProfile = (user) => {
-    console.log("user in set recepient ", user);
-    setRecepient(user);
-    console.log("recepinet in set recepient ", recepient);
+  const setRecepientProfile = async (user) => {
+    try {
+      recepientRef.current = user;
+      setRecepient(user);
+      setMessages([]);
+      //api to retrieve old messages
+      const url = "http://localhost:5000/api/chat";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: JSON.stringify({
+          sender: profile.userId,
+          recepient: user._id,
+        }),
+      });
+      let res = await response.json();
+      if (response.status === 200) {
+        res.messages.forEach((message) => {
+          if (message.sender === profile.userId) {
+            message.id = 0;
+          } else {
+            message.id = message._id;
+          }
+        });
+        setMessages(res.messages);
+      } else {
+        alert(res.message);
+      }
+    } catch (err) {
+      alert(err.message);
+    }
     // setMessages([]);
   };
 
